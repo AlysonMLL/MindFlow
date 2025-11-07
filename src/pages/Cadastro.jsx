@@ -55,7 +55,7 @@ export default function Cadastro() {
             <input
               id="email"
               type="email"
-              placeholder="seu@exemplo.com"
+              placeholder="E-mail"
               {...register('email', { required: 'E-mail obrigatório', pattern: { value: /^\S+@\S+$/i, message: 'Formato inválido' } })}
               style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #e6e9ee' }}
             />
