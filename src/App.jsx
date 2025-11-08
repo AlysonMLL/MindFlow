@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import HeroPlain from './components/HeroPlain';
+import Footer from './components/Footer';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
 import Home from './pages/Home';
@@ -26,6 +27,8 @@ export default function App() {
         {/* Rota coringa (opcional) */}
         <Route path="*" element={<h2 style={{ textAlign: 'center', marginTop: '80px' }}>Página não encontrada 😢</h2>} />
       </Routes>
+      
+      <Footer />
     </BrowserRouter>
   );
 }

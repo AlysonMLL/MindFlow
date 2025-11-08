@@ -61,9 +61,10 @@ export default function Header() {
           {!isHome && (
             <div style={{ marginLeft: 20, display: 'flex', gap: 18 }}>
               <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Início</Link>
-              <Link to="/sobre" style={{ color: 'white', textDecoration: 'none' }}>Sobre</Link>
-              <Link to="/contato" style={{ color: 'white', textDecoration: 'none' }}>Contato</Link>
-              <Link to="/assinatura" style={{ color: 'white', textDecoration: 'none' }}>Assinatura</Link>
+              <a href="#sobre" style={{color:'white', textDecoration:'none'}}>Sobre</a>
+              <a href="#assinatura" style={{color:'white', textDecoration:'none'}}>Assinatura</a>
+              <a href="#contato" style={{color:'white', textDecoration:'none'}}>Contato</a>
+              
             </div>
           )}
         </div>
