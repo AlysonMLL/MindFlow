@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [diasOfensiva, setDiasOfensiva] = useState(0);
+  const [user, setUser] = useState(null);
 
   const isHome = location.pathname === "/home";
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("usuario");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+
+    // Carrega dias de ofensiva do localStorage
+    const streak = parseInt(localStorage.getItem("mf_dias_ofensiva") || "1", 10);
+    setDiasOfensiva(streak);
+  }, []);
 
   function handleLogout() {
     localStorage.removeItem("usuario");
@@ -14,7 +27,6 @@ export default function Header() {
 
   const defaultBg = '#3f3f3f'; 
   const defaultColor = 'white';
-  
   const homeBg = defaultBg;
   const homeColor = defaultColor;
 
@@ -64,7 +76,6 @@ export default function Header() {
               <a href="#sobre" style={{color:'white', textDecoration:'none'}}>Sobre</a>
               <a href="#assinatura" style={{color:'white', textDecoration:'none'}}>Assinatura</a>
               <a href="#contato" style={{color:'white', textDecoration:'none'}}>Contato</a>
-              
             </div>
           )}
         </div>
@@ -98,13 +109,25 @@ export default function Header() {
             </Link>
           </div>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/* NOVO ELEMENTO DE PERFIL */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            {/* ÍCONE DE CHAMA + CONTADOR */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <img 
+                src="/public/chama_icon.png" 
+                alt="Dias de ofensiva" 
+                style={{ width: 40, height: 40 }}
+              />
+              <span style={{ fontWeight: 700, color: '#f97316', fontSize: 20 }}>
+                {diasOfensiva} dias
+              </span>
+            </div>
+
+            {/* ÍCONE DE PERFIL */}
             <div
-              onClick={handleLogout} // Você pode querer mudar isso para navegar para /perfil
+              onClick={handleLogout}
               style={{
-                width: 40,
-                height: 40,
+                width: 42,
+                height: 42,
                 borderRadius: '50%',
                 backgroundColor: '#3cffa1',
                 color: defaultBg,
@@ -118,9 +141,8 @@ export default function Header() {
               }}
               title="Clique para Sair"
             >
-              🧑‍💻
+              {user ? user.email.charAt(0).toUpperCase() : '🧑‍💻'}
             </div>
-            {/* FIM DO NOVO ELEMENTO DE PERFIL */}
           </div>
         )}
       </div>
