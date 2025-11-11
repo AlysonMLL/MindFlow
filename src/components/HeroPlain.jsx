@@ -19,7 +19,7 @@ export default function HeroPlain(){
 
           <div className="cta-row" style={{display:'flex', gap:14, alignItems:'center', marginBottom:18}}>
             <a href="cadastro" className="btn btn-primary btn-large" style={{padding:'12px 22px', borderRadius:16, background:'#3cffa1', color:'#3f3f3f', fontWeight:700, textDecoration:'none'}}>Comece gratuitamente</a>
-            <a href="#" className="btn btn-ghost btn-large" style={{padding:'12px 22px', borderRadius:16, border:'1px solid #e6e9ee', textDecoration:'none', color:'#3f3f3f'}}>Ver trilhas</a>
+            <a href="#trilhas-preview" className="btn btn-ghost btn-large" style={{padding:'12px 22px', borderRadius:16, border:'1px solid #e6e9ee', textDecoration:'none', color:'#3f3f3f'}}>Ver trilhas</a>
           </div>
 
           <div className="badges" style={{display:'flex', gap:24, alignItems:'center', marginTop:8, color:'#6b7280', fontSize:14}}>
@@ -73,45 +73,28 @@ export default function HeroPlain(){
           <aside id="assinatura" aria-labelledby="assinatura-title" style={{ width: '100%' }}>
             <h2 id="assinatura-title" style={{ fontSize: 28, color: '#3f3f3f', marginBottom: 24 }}>Assinatura</h2>
 
-            <div style={{ display: 'grid', gap: 18 }}>
-              
-              <div
-                style={{
-                  borderRadius: 12,
-                  padding:12,
-                  boxShadow: '0 8px 20px rgba(15,23,42,0.04)',
-                  background: '#d6fde2ff'
-                }}
-              >
-                <h4 style={{ marginTop: 0 }}>Freemium</h4>
-                <p style={{ color: '#6b7280', fontSize: 14 }}>Acesso gratuito a recursos essenciais.</p>
-                <ul style={{ marginTop: 8, color: '#374151' }}>
-                  <h4>✅ 3 sessões diárias grátis</h4>
-                  <h4>✅ Check-ins rápidos</h4>
-                  <h4>✅ Trilhas básicas</h4>
-                </ul>
-              </div>
-
-              
-              <div
-                style={{
-                  borderRadius: 12,
-                  padding: 12,
-                  boxShadow: '0 8px 20px rgba(15,23,42,0.04)',
-                  border: '1px solid rgba(60,255,161,0.12)',
-                  background: '#d6fde2ff'
-                }}
-              >
-                <h4 style={{ marginTop: 0 }}>Premium</h4>
-                <p style={{ color: '#6b7280', fontSize: 14 }}>Recursos avançados para resultados mais rápidos.</p>
-                <ul style={{ marginTop: 8, color: '#374151' }}>
-                  <h4>⭐ Acesso ilimitado às trilhas</h4>
-                  <h4>⭐ Recomendações personalizadas (prioridade)</h4>
-                  <h4>⭐ Downloads offline</h4>
-                  
-                </ul>
-              </div>
+            {/* Card Freemium */}
+            <div className="assinatura-card" style={{ background: '#d6fde2ff', marginBottom: 20 }}>
+              <h4 style={{ marginTop: 0 }}>Freemium</h4>
+              <p style={{ color: '#6b7280', fontSize: 14 }}>Acesso gratuito a recursos essenciais.</p>
+              <ul style={{ marginTop: 8, color: '#374151' }}>
+                <h4>✅ 3 sessões diárias grátis</h4>
+                <h4>✅ Check-ins rápidos</h4>
+                <h4>✅ Trilhas básicas</h4>
+              </ul>
             </div>
+
+            {/* Card Premium */}
+            <div className="assinatura-card" style={{ border: '1px solid rgba(60,255,161,0.12)', background: '#d6fde2ff' }}>
+              <h4 style={{ marginTop: 0 }}>Premium</h4>
+              <p style={{ color: '#6b7280', fontSize: 14 }}>Recursos avançados para resultados mais rápidos.</p>
+              <ul style={{ marginTop: 8, color: '#374151' }}>
+                <h4>⭐ Acesso ilimitado às trilhas</h4>
+                <h4>⭐ Recomendações personalizadas (prioridade)</h4>
+                <h4>⭐ Downloads offline</h4>
+              </ul>
+            </div>
+
           </aside>
         </div>
       </section>

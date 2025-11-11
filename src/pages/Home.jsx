@@ -65,9 +65,8 @@ export default function Home() {
   }
 
   function abrirTrilha(id) {
-    // placeholder: navegar para página da trilha (a implementar)
-    alert(`Abrindo trilha ${id} — (a rota da trilha ainda não existe no protótipo)`);
-  }
+  navigate(`/trilha/${id}`);
+}
 
   function acaoRapida(kind) {
     // ações simuladas para o dashboard

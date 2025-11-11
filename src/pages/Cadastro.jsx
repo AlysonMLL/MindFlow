@@ -75,10 +75,11 @@ export default function Cadastro() {
           </div>
 
           <button
+            className="btn-criarconta-cadastro"
             type="submit"
             disabled={isSubmitting}
             style={{
-              width: '100%', padding: 12, borderRadius: 12, background: '#3cffa1', color: '#3f3f3f',
+              width: '100%', padding: 12, borderRadius: 12,
               fontWeight: 700, border: 'none', cursor: 'pointer'
             }}
             aria-label="Criar conta"

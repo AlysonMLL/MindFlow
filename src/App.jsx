@@ -8,26 +8,32 @@ import Footer from './components/Footer';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
 import Home from './pages/Home';
+import Trilha from './pages/Trilha'; // <- certifica que o arquivo existe aqui
+import Perfil from './pages/Perfil'; // 1. Importa o componente Perfil
+
+// ErrorBoundary opcional (vem abaixo caso queira usar)
+function ErrorFallback({ error }) {
+  return (
+    <div style={{ padding: 40 }}>
+      <h2>Ocorreu um erro</h2>
+      <pre style={{ whiteSpace: 'pre-wrap', color: '#a00' }}>{String(error)}</pre>
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        {/* Página inicial */}
         <Route path="/" element={<HeroPlain />} />
-
-        {/* Páginas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-
-        {/* Tela principal após login */}
         <Route path="/home" element={<Home />} />
-
-        {/* Rota coringa (opcional) */}
+        <Route path="/perfil" element={<Perfil />} /> {/* 2. Nova Rota para o Perfil */}
+        <Route path="/trilha/:id" element={<Trilha />} /> {/* <-- rota da trilha */}
         <Route path="*" element={<h2 style={{ textAlign: 'center', marginTop: '80px' }}>Página não encontrada 😢</h2>} />
       </Routes>
-      
       <Footer />
     </BrowserRouter>
   );
