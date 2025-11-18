@@ -12,8 +12,9 @@ export default function Header() {
 
   const isHome = location.pathname === "/home";
   const isPerfil = location.pathname === "/perfil";
+  const isCheckin = location.pathname === "/checkin" || location.pathname.startsWith("/checkin/");
   const isTrilha = location.pathname.startsWith("/trilha"); // detecta /trilha/:id
-  const isInternalApp = isHome || isPerfil || isTrilha; // considera Trilha como rota interna
+  const isInternalApp = isHome || isPerfil || isTrilha || isCheckin;; // considera Trilha como rota interna
   // normaliza o path removendo uma barra final (evita problemas com "/login/" etc)
 const cleanPath = location.pathname.replace(/\/$/, '');
 

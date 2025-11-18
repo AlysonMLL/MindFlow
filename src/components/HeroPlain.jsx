@@ -8,7 +8,7 @@ export default function HeroPlain(){
         <div className="hero-left">
           <h1 className="h1" style={{fontFamily:'Poppins, Inter, sans-serif', fontWeight:800, fontSize:46, lineHeight:1, marginBottom:18}}>
             <div style={{color:'#3f3f3f'}}>Respire.</div>
-            <div style={{color:'#3cffa1'}}>Reflita.</div>
+            <div style={{color:'#3cffa1ff'}}>Reflita.</div>
             <div style={{color:'#3f3f3f'}}>Renove.</div>
           </h1>
 

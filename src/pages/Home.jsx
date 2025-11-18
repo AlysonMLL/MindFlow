@@ -136,16 +136,7 @@ export default function Home() {
                     
                     
                     
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        setTrilhas(prev => prev.map(t => (t.id === trilha.id ? { ...t, progress: 100 } : t)));
-                      }}
-                      style={styles.smallPrimary}
-                      aria-label={`Marcar ${trilha.title} como concluída`}
-                    >
-                      Marcar concluída
-                    </button>
+                    
                   </div>
                 </div>
               ))}

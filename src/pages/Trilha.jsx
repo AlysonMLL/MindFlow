@@ -11,7 +11,7 @@ const defaultTrilhas = [
     modules: [
       { id: 'm1', title: 'O Que é Autocuidado?', duration: 5, audio: '/audios/m1_audio_teste_chuva.mp3', icon: '/icone_star.png' },
       { id: 'm2', title: 'O Poder do Aqui e Agora', duration: 3, audio: '/audios/m2_audio_teste_chuva.mp3', icon: '/icone_star.png' },
-      { id: 'm3', title: 'Meditação Guiada', duration: 7, audio: '/audios/m3.mp3', icon: '/icone_star.png' }
+      { id: 'm3', title: 'Meditação Guiada', duration: 7, audio: '/audios/m3_audio_teste_chuva.mp3', icon: '/icone_star.png' }
     ]
   },
   

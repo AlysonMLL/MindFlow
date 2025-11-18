@@ -10,6 +10,7 @@ import Cadastro from './pages/Cadastro';
 import Home from './pages/Home';
 import Trilha from './pages/Trilha'; // <- certifica que o arquivo existe aqui
 import Perfil from './pages/Perfil'; // 1. Importa o componente Perfil
+import Checkin from './pages/Checkin';
 
 // ErrorBoundary opcional (vem abaixo caso queira usar)
 function ErrorFallback({ error }) {
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/perfil" element={<Perfil />} /> {/* 2. Nova Rota para o Perfil */}
         <Route path="/trilha/:id" element={<Trilha />} /> {/* <-- rota da trilha */}
+        <Route path="/checkin" element={<Checkin />} />
         <Route path="*" element={<h2 style={{ textAlign: 'center', marginTop: '80px' }}>Página não encontrada 😢</h2>} />
       </Routes>
       <Footer />
