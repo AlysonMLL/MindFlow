@@ -1,324 +1,289 @@
-// src/pages/Home.jsx
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-/* dados iniciais (podem vir da API depois) */
+
 const mockTrilhas = [
-  { id: 1, title: "Fundamentos do Autocuidado", progress: 0, color: "#64b5f6" },
-  { id: 2, title: "Meditação e Atenção Plena (Mindfulness)", progress: 0, color: "#81c784" },
-  { id: 3, title: "Gestão de Estresse e Ansiedade", progress: 0, color: "#ba68c8" },
-  { id: 4, title: "Saúde Física, Sono e Nutrição", progress: 0, color: "#ffb74d" },
-  { id: 5, title: "Comunicação Não-Violenta e Relações", progress: 0, color: "#4db6ac" }
+  { id: 1, title: "Foco Rápido - Mantenha seu foco", progress: 0, color: "#64b5f6", image: "/home_trilha1.png", sessions: 3, duration: 15, tag: "Concentração", level: "Iniciante" },
+  { id: 2, title: "Mindfulness - Atenção plena", progress: 30, color: "#6fd1b8", image: "/home_trilha2.jpg", sessions: 4, duration: 15, tag: "Relaxamento", level: "Intermediário" },
+  { id: 3, title: "Fadiga Mental - Alivie o estresse", progress: 50, color: "#5ec7c4", image: "/home_trilha3.png", sessions: 3, duration: 10, tag: "Sono", level: "Iniciante" },
+  { id: 4, title: "Sono Tranquilo - Relaxe para uma boa noite de sono", progress: 0, color: "#7ad8c9", image: "/home_trilha4.png", sessions: 3, duration: 20, tag: "Bem-estar", level: "Iniciante" },
+  { id: 5, title: "Meditação Profunda", progress: 0, color: "#4fb0d9", image: "/home_trilha5.png", sessions: 5, duration: 25, tag: "Concentração", level: "Avançado" }
 ];
 
-/* componente de barra de progresso simples */
 function ProgressBar({ value = 0, color = "#3cffa1" }) {
-  const safe = Math.max(0, Math.min(100, value));
+  const safe = Math.max(0, Math.min(100, Number(value) || 0));
   return (
-    <div style={{ height: 10, background: "#e6e6e6", borderRadius: 6, overflow: "hidden" }} aria-hidden>
-      <div
-        style={{
-          width: `${safe}%`,
-          height: "100%",
-          background: color,
-          transition: "width 0.4s ease"
-        }}
-      />
+    <div className="mf-progress-track" aria-hidden>
+      <div className="mf-progress-fill" style={{ width: `${safe}%`, background: color }} />
     </div>
   );
+}
+
+
+function mergeSavedWithDefaults(savedArray, defaults) {
+  try {
+    if (!Array.isArray(savedArray)) return defaults;
+
+    const savedMap = new Map(savedArray.map(t => [String(t.id), t]));
+
+    return defaults.map(def => {
+      const s = savedMap.get(String(def.id));
+      if (!s) return def;
+
+      return {
+        
+        ...def,
+        
+        ...s,
+        image: s.image || def.image,
+        sessions: typeof s.sessions === "number" ? s.sessions : def.sessions,
+        duration: typeof s.duration === "number" ? s.duration : def.duration,
+        tag: s.tag || def.tag,
+        level: s.level || def.level,
+        progress: typeof s.progress === "number" ? s.progress : def.progress,
+      };
+    });
+  } catch (e) {
+    console.warn("mergeSavedWithDefaults erro:", e);
+    return defaults;
+  }
 }
 
 export default function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
-  /* trilhas com persistência local */
   const [trilhas, setTrilhas] = useState(() => {
     try {
-      const saved = localStorage.getItem("mf_trilhas_v1");
-      return saved ? JSON.parse(saved) : mockTrilhas;
+      const raw = localStorage.getItem("mf_trilhas_v1");
+      if (!raw) return mockTrilhas;
+
+      const parsed = JSON.parse(raw);
+      // se parsed for array mas com formato antigo, mescla com defaults
+      if (Array.isArray(parsed)) {
+        return mergeSavedWithDefaults(parsed, mockTrilhas);
+      }
+      // se parsed for objeto (um caso estranho), tenta extrair array
+      if (parsed && parsed.trilhas && Array.isArray(parsed.trilhas)) {
+        return mergeSavedWithDefaults(parsed.trilhas, mockTrilhas);
+      }
+      return mockTrilhas;
     } catch (e) {
+      console.warn("Falha ao carregar trilhas do localStorage; usando defaults", e);
       return mockTrilhas;
     }
   });
 
   useEffect(() => {
+    // verificar usuário autenticado
     const savedUser = localStorage.getItem("usuario");
     if (!savedUser) {
-      // se não estiver logado manda pro login
       navigate("/login", { replace: true });
     } else {
-      setUser(JSON.parse(savedUser));
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch {
+        setUser(null);
+      }
     }
+    
   }, [navigate]);
 
-  /* salvar trilhas sempre que mudarem */
+  
   useEffect(() => {
-    localStorage.setItem("mf_trilhas_v1", JSON.stringify(trilhas));
+    try {
+      localStorage.setItem("mf_trilhas_v1", JSON.stringify(trilhas));
+    } catch (e) {
+      console.warn("Erro salvando trilhas no localStorage", e);
+    }
   }, [trilhas]);
 
-  /* helpers */
-  function atualizarProgresso(id, delta) {
-    setTrilhas(prev =>
-      prev.map(t => (t.id === id ? { ...t, progress: Math.max(0, Math.min(100, t.progress + delta)) } : t))
-    );
-  }
-
   function abrirTrilha(id) {
-  navigate(`/trilha/${id}`);
-}
-
-  function acaoRapida(kind) {
-    // ações simuladas para o dashboard
-    switch (kind) {
-      case "meditacao":
-        alert("Iniciando meditação guiada de 5 min (simulação) — em breve terá áudio real.");
-        break;
-      case "audios":
-        alert("Abrindo biblioteca de áudios (simulação).");
-        break;
-      case "dormir":
-        alert("Sessão Noturna iniciada (simulação) — boa noite!");
-        break;
-      case "relaxar":
-        alert("Exercício de relaxamento rápido (simulação).");
-        break;
-      case "concentracao":
-        alert("Trilha de concentração iniciada (simulação).");
-        break;
-      default:
-        alert("Ação rápida: " + kind);
-    }
+    navigate(`/trilha/${id}`);
   }
 
-  /* estatísticas simples */
+  function handlePlayClick(e, id) {
+    e.stopPropagation();
+    abrirTrilha(id);
+  }
+
   const stats = useMemo(() => {
     const total = trilhas.length;
-    const avg = Math.round(trilhas.reduce((s, t) => s + t.progress, 0) / (total || 1));
-    const completed = trilhas.filter(t => t.progress >= 100).length;
+    const sum = trilhas.reduce((s, t) => s + (Number(t.progress) || 0), 0);
+    const avg = Math.round(sum / (total || 1));
+    const completed = trilhas.filter(t => Number(t.progress) >= 100).length;
     return { total, avg, completed };
   }, [trilhas]);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.wrapper}>
-        {/* COLUNA ESQUERDA - Trilhas */}
-        <main style={styles.left}>
-          <div style={styles.card}>
-            <h1 style={styles.title}>Sua Trilha 🚀</h1>
-            <p style={styles.subtitle}>
-              Continue de onde parou, <strong>{user ? user.email : "Usuário"}</strong>.
-            </p>
+    <div className="mf-page">
+      <div className="mf-wrapper">
+        <main className="mf-left">
+          <div className="mf-card mf-card-page-title">
+            <h1 className="mf-title">Suas Trilhas <span role="img" aria-label="rocket">🚀</span></h1>
+            <p className="mf-subtitle">Continue de onde parou, <strong>{user ? user.email : "Usuário"}</strong>.</p>
+          </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              {trilhas.map(trilha => (
-                <div
-                  key={trilha.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => abrirTrilha(trilha.id)}
-                  onKeyDown={e => {
-                    if (e.key === "Enter" || e.key === " ") abrirTrilha(trilha.id);
-                  }}
-                  className="trilhaItem"
-                  style={styles.trilhaItem}
-                >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-                    <div style={{ fontWeight: 700, color: "#333" }}>{`Trilha ${trilha.id}: ${trilha.title}`}</div>
-                    <div style={{ fontSize: 13, color: "#777" }}>{trilha.progress}% completo</div>
+          {trilhas.map(trilha => (
+            <article
+              key={trilha.id}
+              className="trilha-card"
+              role="button"
+              tabIndex={0}
+              onClick={() => abrirTrilha(trilha.id)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') abrirTrilha(trilha.id); }}
+            >
+              <div className="trilha-card-inner">
+                <div className="trilha-content">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                    <div>
+                      <div className="trilha-title">{trilha.title}</div>
+                      <div className="trilha-subinfo">{trilha.progress}% completo</div>
+                    </div>
+
+                    <button
+                      onClick={(e) => handlePlayClick(e, trilha.id)}
+                      className="play-btn"
+                      aria-label={`Abrir trilha ${trilha.title}`}
+                      title="Abrir trilha"
+                    >
+                      ▶
+                    </button>
                   </div>
 
-                  <div style={{ marginTop: 10 }}>
+                  <div style={{ marginTop: 14 }}>
                     <ProgressBar value={trilha.progress} color={trilha.color} />
                   </div>
 
-                  <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
-                    
-                    
-                    
-                    
+                  
+                  <div className="trilha-image-center">
+                    {trilha.image ? (
+                      
+                      <img src={trilha.image} alt={trilha.title} className="trilha-image-large" />
+                    ) : (
+                      <div className="trilha-image-placeholder">Sem imagem</div>
+                    )}
+                  </div>
+
+                  <div className="trilha-meta">
+                    <div className="meta-left">
+                      <img src="/icone_fone.png" alt="sessões" className="meta-icon" />
+                      <span className="meta-text">{trilha.sessions ?? '—'} sessões</span>
+
+                      <img src="/icone_timer.png" alt="duração" className="meta-icon" style={{ marginLeft: 16 }} />
+                      <span className="meta-text">{trilha.duration ?? '—'} min</span>
+
+                      <img src="/icone_brain.png" alt="tag" className="meta-icon" style={{ marginLeft: 16 }} />
+                      <span className="meta-text">{trilha.tag ?? '—'}</span>
+                    </div>
+
+                    <div className="meta-right">
+                      <span className="pill-level">{trilha.level ?? ''}</span>
+                      <span className="pill-time">{trilha.duration ? `${trilha.duration} min` : ''}</span>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </article>
+          ))}
+
         </main>
 
-        {/* COLUNA DIREITA - Dashboard / Quick actions */}
-        <aside style={styles.right}>
-          <div style={styles.card}>
-            <h3 style={{ marginTop: 0, marginBottom: 12 }}>Painel Rápido</h3>
+        <aside className="mf-right">
+          <div className="mf-card">
+            <h3 style={{ marginTop: 0 }}>Acesso Rápido</h3>
+            <div className="quick-grid">
+              <button className="quick-btn" onClick={() => navigate('/checkin')}>
+                <span className="quick-icon"><img src="/icone_brain.png" alt="Meditações" /></span>
+                <div className="quick-label">Meditações</div>
+              </button>
 
-            {/* quick actions */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <button style={styles.actionBtn} onClick={() => acaoRapida("meditacao")}>🧘‍♀️ Meditações</button>
-              <button style={styles.actionBtn} onClick={() => acaoRapida("audios")}>🎧 Áudios</button>
-              <button style={styles.actionBtn} onClick={() => acaoRapida("dormir")}>🌙 Dormir</button>
-              <button style={styles.actionBtn} onClick={() => acaoRapida("relaxar")}>💤 Relaxar</button>
+              <button className="quick-btn" onClick={() => alert('Áudios (simulação)')}>
+                <span className="quick-icon"><img src="/icone_fone.png" alt="Áudios" /></span>
+                <div className="quick-label">Áudios</div>
+              </button>
+
+              <button className="quick-btn" onClick={() => alert('Dormir (simulação)')}>
+                <span className="quick-icon"><img src="/icone_lua.png" alt="Dormir" /></span>
+                <div className="quick-label">Dormir</div>
+              </button>
+
+              <button className="quick-btn" onClick={() => alert('Relaxar (simulação)')}>
+                <span className="quick-icon"><img src="/icone_relax.png" alt="Relaxar" /></span>
+                <div className="quick-label">Relaxar</div>
+              </button>
             </div>
 
-            <hr style={{ margin: "18px 0", border: "none", borderTop: "1px solid #eee" }} />
-
-            {/* recomendações */}
-            <h4 style={{ margin: "0 0 8px 0" }}>Recomendações</h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-              <li style={styles.recItem}><strong>Foco Rápido</strong> — 5 min para retomar a atenção</li>
-              <li style={styles.recItem}><strong>Relaxar antes de dormir</strong> — 10 min de visualização</li>
-              <li style={styles.recItem}><strong>Técnica Pomodoro</strong> — sessão de estudo + pausa</li>
-            </ul>
-
-            <hr style={{ margin: "18px 0", border: "none", borderTop: "1px solid #eee" }} />
-
-            {/* estatísticas */}
-            <h4 style={{ margin: "0 0 8px 0" }}>Estatísticas</h4>
-            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 12, color: "#666" }}>Progresso médio</div>
-                <div style={{ fontWeight: 700, fontSize: 20 }}>{stats.avg}%</div>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 12, color: "#666" }}>Concluídas</div>
-                <div style={{ fontWeight: 700, fontSize: 20 }}>{stats.completed}/{stats.total}</div>
-              </div>
-            </div>
-
-            <hr style={{ margin: "18px 0", border: "none", borderTop: "1px solid #eee" }} />
-
-            
-
-            {/* perfil rápido */}
-            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg,#fff,#e6ffe9)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700 }}>
-                {user ? user.email.charAt(0).toUpperCase() : "U"}
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700 }}>{user ? user.email : "Usuário"}</div>
-                <div style={{ fontSize: 13, color: "#666" }}>Plano: Freemium</div>
-              </div>
-            </div>
           </div>
 
-          {/* sugestão: card menor com atalhos */}
           <div style={{ height: 18 }} />
-          <div style={styles.cardSmall}>
-            <div style={{ fontSize: 13, color: "#444", marginBottom: 8, fontWeight: 700 }}>Atalhos</div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <button style={styles.chip} onClick={() => acaoRapida("concentracao")}>Concentração</button>
-              <button style={styles.chip} onClick={() => acaoRapida("respirar")}>Respiração</button>
-              <button style={styles.chip} onClick={() => acaoRapida("alongar")}>Alongar</button>
+
+          
+
+          <div className="mf-card">
+            <h4 style={{ marginTop: 0 }}>Recomendado para você</h4>
+            <div className="rec-list">
+              <div className="rec-item">
+                <div className="rec-left">
+                  <div className="rec-title">Mindfulness</div>
+                  <div className="rec-meta">15 min · Atenção</div>
+                </div>
+                <button className="rec-play" onClick={() => abrirTrilha(1)}>▶</button>
+              </div>
+
+              <div className="rec-item">
+                <div className="rec-left">
+                  <div className="rec-title">Sono</div>
+                  <div className="rec-meta">20 min · Bem-estar</div>
+                </div>
+                <button className="rec-play" onClick={() => abrirTrilha(5)}>▶</button>
+              </div>
+
+              <div className="rec-item">
+                <div className="rec-left">
+                  <div className="rec-title">Foco Rápido</div>
+                  <div className="rec-meta">5 min · Concentração</div>
+                </div>
+                <button className="rec-play" onClick={() => abrirTrilha(4)}>▶</button>
+              </div>
             </div>
           </div>
+
+          <div style={{ height: 18 }} />
+
+          <div className="mf-card">
+            <h4 style={{ marginTop: 0 }}>Estatísticas</h4>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <div>
+                <div className="stat-label">Progresso médio</div>
+                <div className="stat-value">{stats.avg}%</div>
+              </div>
+              <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                <div className="stat-label">Concluídas</div>
+                <div className="stat-value">{stats.completed}/{stats.total}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="title-premium">Seja Premium MindFlow</div>
+          <div className="desc-premium">Desbloqueie todas as trilhas e recursos exclusivos.</div>
+          <div style={{ height: 12 }} />
+          
+          <div className="card-premium">
+            <img src="/card_premium.png" alt="MindFlow Premium" className="card-premium-image" />
+          </div>
+
+          <div>
+            <button
+              className="btn-premium"
+              onClick={() => alert('Upgrade para Premium (simulação)')}
+            >
+              Quero ser Premium!
+            </button>
+          </div>
+
         </aside>
       </div>
     </div>
   );
-}
-
-/* estilos inline organizados (você pode mover para styles.css se preferir) */
-const styles = {
-  page: {
-    minHeight: "100vh",
-    background: "linear-gradient(135deg, rgba(60,255,161,0.12), rgba(141,245,255,0.08))",
-    padding: "36px 20px",
-    fontFamily: "Poppins, Inter, sans-serif",
-  },
-  wrapper: {
-    maxWidth: 1200,
-    margin: "0 auto",
-    display: "grid",
-    gridTemplateColumns: "1fr 360px",
-    gap: 28,
-    alignItems: "start",
-  },
-  left: {
-    width: "100%",
-  },
-  right: {
-    width: "100%",
-    position: "sticky",
-    top: 90, // mantém o painel visível ao rolar
-    alignSelf: "start",
-  },
-  card: {
-    background: "#fff",
-    padding: 28,
-    borderRadius: 14,
-    boxShadow: "0 10px 40px rgba(0,0,0,0.06)"
-  },
-  cardSmall: {
-    background: "#fff",
-    padding: 14,
-    borderRadius: 12,
-    boxShadow: "0 8px 30px rgba(0,0,0,0.04)"
-  },
-  title: { margin: 0, marginBottom: 6, fontSize: 28, color: "#333" },
-  subtitle: { marginTop: 0, color: "#555", marginBottom: 18 },
-  trilhaItem: {
-    border: "1px solid #eee",
-    borderRadius: 10,
-    padding: 16,
-    backgroundColor: "#fff",
-    transition: "transform 0.15s, box-shadow 0.15s",
-    cursor: "pointer",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.02)"
-  },
-  smallBtn: {
-    background: "#3cffa1",
-    color: "#163a34",
-    border: "none",
-    padding: "8px 10px",
-    borderRadius: 10,
-    fontWeight: 700,
-    cursor: "pointer"
-  },
-  smallPrimary: {
-    background: "#2563eb",
-    color: "#fff",
-    border: "none",
-    padding: "8px 10px",
-    borderRadius: 10,
-    fontWeight: 700,
-    cursor: "pointer"
-  },
-  smallGhost: {
-    background: "transparent",
-    color: "#374151",
-    border: "1px solid #e6e9ee",
-    padding: "8px 10px",
-    borderRadius: 10,
-    cursor: "pointer"
-  },
-  actionBtn: {
-    background: "#f7f7f7",
-    border: "1px solid #eee",
-    padding: "12px",
-    borderRadius: 10,
-    cursor: "pointer",
-    fontWeight: 700
-  },
-  recItem: {
-    background: "#fcfcfc",
-    padding: 10,
-    borderRadius: 8,
-    border: "1px solid #f0f0f0",
-    fontSize: 14
-  },
-  chip: {
-    background: "#f1fff7",
-    border: "1px solid rgba(60,255,161,0.18)",
-    color: "#2b7a63",
-    padding: "6px 10px",
-    borderRadius: 999,
-    cursor: "pointer",
-    fontWeight: 700,
-    fontSize: 13
-  }
-};
-
-/* responsividade simples */
-const mq = window.matchMedia && window.matchMedia("(max-width: 980px)");
-if (mq && mq.matches) {
-  styles.wrapper.gridTemplateColumns = "1fr";
-  styles.right.position = "relative";
-  styles.right.top = 0;
 }

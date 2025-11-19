@@ -212,7 +212,7 @@ export default function Checkin() {
                 background: canSubmit ? '#3cffa1' : '#cfeee0',
                 border: 'none',
                 color: '#06313a',
-                fontWeight: 800,
+                fontWeight: 600,
                 fontSize: 18,
                 cursor: canSubmit ? 'pointer' : 'not-allowed',
                 boxShadow: canSubmit ? '0 12px 30px rgba(60,255,161,0.12)' : 'none'

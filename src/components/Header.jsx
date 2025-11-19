@@ -137,7 +137,7 @@ const showSidebar = !noSidebarRoutes.includes(cleanPath);
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                {/* caminho correto: /chama_icon.png (public) */}
+
                 <img
                   src="/chama_icon.png"
                   alt="Dias de ofensiva"
