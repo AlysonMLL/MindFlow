@@ -469,3 +469,75 @@ body{font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetic
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ----------------------------------------------------------------------------------------
+    header da página inicial
+    ---------------------------------------------------------------------------------------- */
+
+.sobre-header {
+  transition: transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, color .12s;
+  will-change: transform, box-shadow, color;  
+  color: #e8e8e8; text-decoration: none;
+}
+
+.sobre-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.167);
+  color: #fff;
+  
+
+}
+
+.sobre-header {
+  transition: transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, color .12s;
+  will-change: transform, box-shadow, color;  
+  color: #e8e8e8; text-decoration: none;
+}
+
+.sobre-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.167);
+  color: #fff;
+  
+
+}
+
+.inicio-header {
+  transition: transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, color .12s;
+  will-change: transform, box-shadow, color;  
+  color: #e8e8e8; text-decoration: none;
+}
+
+.inicio-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.167);
+  color: #fff;
+  
+}
+
+.assinatura-header {
+  transition: transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, color .12s;
+  will-change: transform, box-shadow, color;  
+  color: #e8e8e8; text-decoration: none;
+}
+
+.assinatura-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.167);
+  color: #fff;
+  
+}
+
+.contato-header {
+  transition: transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, color .12s;
+  will-change: transform, box-shadow, color;  
+  color: #e8e8e8; text-decoration: none;
+}
+
+.contato-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.167);
+  color: #fff;
+  
+}

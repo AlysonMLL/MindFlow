@@ -91,7 +91,7 @@ export default function HeroPlain(){
               <ul style={{ marginTop: 8, color: '#374151' }}>
                 <h4>⭐ Acesso ilimitado às trilhas</h4>
                 <h4>⭐ Recomendações personalizadas (prioridade)</h4>
-                <h4>⭐ Downloads offline</h4>
+                <h4>⭐ Downloads</h4>
               </ul>
             </div>
 

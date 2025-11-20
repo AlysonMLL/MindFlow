@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 const mockTrilhas = [
   { id: 1, title: "Foco Rápido - Mantenha seu foco", progress: 0, color: "#64b5f6", image: "/home_trilha1.png", sessions: 3, duration: 15, tag: "Concentração", level: "Iniciante" },
-  { id: 2, title: "Mindfulness - Atenção plena", progress: 30, color: "#6fd1b8", image: "/home_trilha2.jpg", sessions: 4, duration: 15, tag: "Relaxamento", level: "Intermediário" },
-  { id: 3, title: "Fadiga Mental - Alivie o estresse", progress: 50, color: "#5ec7c4", image: "/home_trilha3.png", sessions: 3, duration: 10, tag: "Sono", level: "Iniciante" },
+  { id: 2, title: "Mindfulness - Atenção plena", progress: 0, color: "#6fd1b8", image: "/home_trilha2.jpg", sessions: 4, duration: 15, tag: "Relaxamento", level: "Intermediário" },
+  { id: 3, title: "Fadiga Mental - Alivie o estresse", progress: 0, color: "#5ec7c4", image: "/home_trilha3.png", sessions: 3, duration: 10, tag: "Sono", level: "Iniciante" },
   { id: 4, title: "Sono Tranquilo - Relaxe para uma boa noite de sono", progress: 0, color: "#7ad8c9", image: "/home_trilha4.png", sessions: 3, duration: 20, tag: "Bem-estar", level: "Iniciante" },
-  { id: 5, title: "Meditação Profunda", progress: 0, color: "#4fb0d9", image: "/home_trilha5.png", sessions: 5, duration: 25, tag: "Concentração", level: "Avançado" }
+  { id: 5, title: "Meditação Profunda - Autocuidado para o corpo e a mente", progress: 0, color: "#4fb0d9", image: "/home_trilha5.png", sessions: 5, duration: 25, tag: "Concentração", level: "Avançado" }
 ];
 
 function ProgressBar({ value = 0, color = "#3cffa1" }) {
@@ -194,8 +194,8 @@ export default function Home() {
             <h3 style={{ marginTop: 0 }}>Acesso Rápido</h3>
             <div className="quick-grid">
               <button className="quick-btn" onClick={() => navigate('/checkin')}>
-                <span className="quick-icon"><img src="/icone_brain.png" alt="Meditações" /></span>
-                <div className="quick-label">Meditações</div>
+                <span className="quick-icon"><img src="/icone_checkin2.png" alt="Check-in" /></span>
+                <div className="quick-label">Check-in</div>
               </button>
 
               <button className="quick-btn" onClick={() => alert('Áudios (simulação)')}>

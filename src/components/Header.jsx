@@ -95,7 +95,7 @@ const showSidebar = !noSidebarRoutes.includes(cleanPath);
             style={{ width: 60, height: 60, borderRadius: 10, objectFit: 'cover',  }}
           />
           <Link
-            to="/"
+            
             style={{
               color: defaultColor,
               fontFamily: 'Poppins, Inter, sans-serif',
@@ -109,10 +109,10 @@ const showSidebar = !noSidebarRoutes.includes(cleanPath);
 
           {!isInternalApp && (
             <div style={{ marginLeft: 20, display: 'flex', gap: 18 }}>
-              <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Início</Link>
-              <a href="#sobre" style={{ color: 'white', textDecoration: 'none' }}>Sobre</a>
-              <a href="#assinatura" style={{ color: 'white', textDecoration: 'none' }}>Assinatura</a>
-              <a href="#contato" style={{ color: 'white', textDecoration: 'none' }}>Contato</a>
+              <Link to="/" className="inicio-header" >Início</Link>
+              <a href="#sobre" className="sobre-header" >Sobre</a>
+              <a href="#assinatura" className="assinatura-header" >Assinatura</a>
+              <a href="#contato" className="contato-header">Contato</a>
             </div>
           )}
         </div>
